@@ -22,7 +22,14 @@ type Query {
 }
 
 type Mutation {
+  createUserSettings(createUserSettingsData: CreateUserSettingsInput!): UserSetting!
   createUser(createUserData: CreateUserInput!): User!
+}
+
+input CreateUserSettingsInput {
+  userId: Int!
+  receiveNotifications: Boolean = false
+  receiveEmails: Boolean = false
 }
 
 input CreateUserInput {

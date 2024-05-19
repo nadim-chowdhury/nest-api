@@ -1,3 +1,4 @@
+import { Inject } from '@nestjs/common';
 import {
   Args,
   Int,
@@ -7,14 +8,22 @@ import {
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
-import { User } from '../models/User';
-import { mockUsers } from '../__mocks__/mockUsers';
-import { UserSetting } from '../models/UserSetting';
-import { mockUserSettings } from '../__mocks__/mockUserSettings';
-import { CreateUserInput } from '../utils/CreateUserInput';
+import { mockUsers } from 'src/graphql/__mocks__/mockUsers';
+import { mockUserSettings } from 'src/graphql/__mocks__/mockUserSettings';
+import { User } from 'src/graphql/models/User';
+import { UserSetting } from 'src/graphql/models/UserSetting';
+import { CreateUserInput } from 'src/graphql/utils/CreateUserInput';
+import { UsersService } from './users.service';
+// import { User } from '../models/User';
+// import { mockUsers } from '../__mocks__/mockUsers';
+// import { UserSetting } from '../models/UserSetting';
+// import { mockUserSettings } from '../__mocks__/mockUserSettings';
+// import { CreateUserInput } from '../utils/CreateUserInput';
 
 @Resolver((of) => User)
 export class UserResolver {
+  constructor(@Inject(UsersService) private UsersService: UsersService) {}
+
   @Query((returns) => User)
   getUser() {
     return {
@@ -31,7 +40,7 @@ export class UserResolver {
 
   @Query((returns) => [User])
   getUsers() {
-    return mockUsers;
+    return this.UsersService.getUsers();
   }
 
   @ResolveField((returns) => UserSetting, { name: 'settings' })
